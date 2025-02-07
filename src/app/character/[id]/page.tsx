@@ -4,10 +4,31 @@ import { getCharacterById } from '@/services/characters';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
+
 
 interface CharacterPageProps {
-    params: { id: string }
+    params: Promise<{ id: string }>
 }
+
+
+export async function generateStaticParams() {
+    return [
+        { id: '1' },
+        { id: '2' },
+        { id: '3' },
+    ]
+}
+
+export async function generateMetadata({ params }: CharacterPageProps): Promise<Metadata> {
+    const { id } = await params;
+    const character = await getCharacterById(id);
+    return {
+        title: character.name
+    }
+}
+
+
 
 export default async function CharacterPage({ params }: CharacterPageProps) {
 

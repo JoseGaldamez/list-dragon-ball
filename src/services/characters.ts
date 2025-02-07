@@ -10,7 +10,9 @@ export const getCharacters = async () => {
 
 export const getCharacterById = async (id: string) => {
     const response = await fetch(`${API_URL}/${id}`, {
-        cache: "force-cache",
+        next: {
+            revalidate: 60 * 60 * 24, // cada cuanto tiempo se va verifiar el API.
+        },
     });
     const data: Character = await response.json();
     return data;
